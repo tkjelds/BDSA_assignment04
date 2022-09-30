@@ -1,0 +1,21 @@
+@startuml
+Project <-- ProjectManager
+Class1 --> Project
+
+class Project {
+    name : String
+    startDate : Date
+    endDate : Date
+  
+}
+
+class ProjectManager {
+    name : String
+    telephone : Int
+    team : String
+}
+ProjectManager : startproject()
+ProjectManager : Terminate(Project) 
+ArrayList : Object[] elementData
+ArrayList : size()
+@enduml
