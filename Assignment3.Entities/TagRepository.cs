@@ -10,19 +10,12 @@ public class TagRepository : ITagRepository
     }
     public (Response Response, int TagId) Create(TagCreateDTO tag)
     {
-        try 
-        {
-            _context.Tags.Add(new Tag{
-                Name = tag.Name
-            });
-            _context.SaveChanges();
-            var tagId = _context.Tags.Where(t => t.Name == tag.Name).First().Id;
-            return (Response.Created,tagId);
-        } 
-        catch 
-        {
-            return (Response.Conflict, -1);
-        } 
+        var _tag = _context.Tags.FirstOrDefault(t => t.Name == tag.Name);
+        if(_tag is not null) return (Response.Conflict,_tag.Id);
+        var entity = new Tag{ Name = tag.Name};
+        _context.Tags.Add(entity);
+        _context.SaveChanges();
+        return (Response.Created,entity.Id);
     }
 
     public Response Delete(int tagId, bool force = false)

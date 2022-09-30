@@ -45,7 +45,7 @@ public class TaskRepository : ITaskRepository
     public Response Delete(int taskId)
     {
         // Check if task exists
-        var task = _context.Tasks.Where(t => t.Id == taskId).FirstOrDefault();
+        var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) return Response.BadRequest; // return bad request if task does not exist
         // If the task is active, set the state to 
         if(task.State == State.Active){
@@ -64,7 +64,7 @@ public class TaskRepository : ITaskRepository
     public TaskDetailsDTO Read(int taskId)
     {
         //Check if task exists
-        var task = _context.Tasks.Where(t => t.Id == taskId).FirstOrDefault();
+        var task = _context.Tasks.FirstOrDefault(t => t.Id == taskId);
         if (task == null) return null;
         TaskDetailsDTO tdo = new TaskDetailsDTO(task.Id,
                                                 task.Title,

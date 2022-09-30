@@ -12,9 +12,11 @@ public class UserRepository : IUserRepository
     {
         var _user = _context.Users.FirstOrDefault(u => u.Email == user.Email);
         if (_user is not null) return (Response.Conflict, _user.Id);
+
         var entity = new User(){Name = user.Name, Email = user.Email};
         _context.Users.Add(entity); 
         _context.SaveChanges();
+
         return (Response.Created,entity.Id);
 
     }
@@ -24,14 +26,12 @@ public class UserRepository : IUserRepository
         // Check if force is used
         if(force != true) return Response.Conflict;
         // Check if user exists
-        try{
-        var _user = _context.Users.Where(u => u.Id == userId).First();
+        var _user = _context.Users.FirstOrDefault(u => u.Id == userId);
+        if (_user is null) return Response.BadRequest;
         _context.Users.Remove(_user);
         _context.SaveChanges();
         return Response.Deleted;
-        } catch {
-            return (Response.Conflict);
-        }
+
     }
 
     public UserDTO Read(int userId)
